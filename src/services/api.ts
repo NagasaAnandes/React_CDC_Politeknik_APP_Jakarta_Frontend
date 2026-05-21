@@ -18,7 +18,6 @@ export const createAPI = (): AxiosInstance => {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
-    withCredentials: true,
   });
 
   // Request interceptor: inject token if available via getter

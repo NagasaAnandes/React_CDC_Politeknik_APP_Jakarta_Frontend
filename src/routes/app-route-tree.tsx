@@ -8,6 +8,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import RoleGuard from "./RoleGuard";
 import { LoginPage } from "@/modules/auth/pages/login-page";
 import PublicLandingPage from "@/modules/public/pages/public-landing-page";
+import PublicJobsPage from "@/modules/jobs/pages/public-jobs-page";
+import PublicJobDetailPage from "@/modules/jobs/pages/public-job-detail-page";
 import AdminDashboardPage from "@/modules/admin/pages/admin-dashboard-page";
 import AdminUsersPage from "@/modules/admin/pages/admin-users-page";
 import AdminJobsPage from "@/modules/admin/pages/admin-jobs-page";
@@ -60,6 +62,8 @@ export const routeGroups: RouteGroupConfig[] = [
     element: <PublicLayout />,
     children: [
       { index: true, element: <PublicLandingPage /> },
+      { path: "jobs", element: <PublicJobsPage /> },
+      { path: "jobs/:slug", element: <PublicJobDetailPage /> },
       { path: "login", element: <LoginPage /> },
     ],
   },
