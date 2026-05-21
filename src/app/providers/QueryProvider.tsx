@@ -1,8 +1,20 @@
 import React from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (err: any) => {
+      if (import.meta.env.DEV) {
+        // eslint-disable-next-line no-console
+        console.error("[react-query] query error", err);
+      }
+    },
+  }),
   defaultOptions: {
     queries: {
       // only retry for network/server errors, do NOT retry on auth errors
@@ -13,12 +25,6 @@ const queryClient = new QueryClient({
       },
       staleTime: 1000 * 60, // 1 minute
       refetchOnWindowFocus: false,
-      onError: (err: any) => {
-        if (import.meta.env.DEV) {
-          // eslint-disable-next-line no-console
-          console.error("[react-query] query error", err);
-        }
-      },
     },
   },
 });

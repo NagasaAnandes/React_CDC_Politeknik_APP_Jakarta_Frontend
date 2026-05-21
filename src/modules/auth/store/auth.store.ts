@@ -22,11 +22,11 @@ const syncAuthState = (
   user: User | null,
   token: string | null,
 ) => {
-  set(() => ({
+  set({
     user,
     token,
     isAuthenticated: Boolean(user && token),
-  }));
+  });
 };
 
 export const useAuthStore = create<AuthState>()(

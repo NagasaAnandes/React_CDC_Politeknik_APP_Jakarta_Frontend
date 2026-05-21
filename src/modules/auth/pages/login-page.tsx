@@ -22,7 +22,7 @@ export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const setAuth = useAuthStore((s) => s.setAuth);
 
-  const { register, handleSubmit, formState } = useForm<FormValues>({
+  const { register, handleSubmit } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { email: "", password: "" },
   });
@@ -69,9 +69,9 @@ export const LoginPage: React.FC = () => {
             <button
               type="submit"
               className="w-full bg-blue-600 text-white py-2 rounded"
-              disabled={mutation.isLoading}
+              disabled={mutation.isPending}
             >
-              {mutation.isLoading ? "Signing in..." : "Sign in"}
+              {mutation.isPending ? "Signing in..." : "Sign in"}
             </button>
           </div>
         </form>

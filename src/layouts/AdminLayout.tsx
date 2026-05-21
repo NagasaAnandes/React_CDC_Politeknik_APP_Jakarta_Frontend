@@ -1,15 +1,8 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
 
 export const AdminLayout: React.FC = () => {
-  return (
-    <div>
-      <header className="p-4 border-b">Admin Header</header>
-      <main className="p-4">
-        <Outlet />
-      </main>
-    </div>
-  );
+  return <DashboardLayout brand="Admin Console" role="SUPER_ADMIN" />;
 };
 
 export default AdminLayout;
