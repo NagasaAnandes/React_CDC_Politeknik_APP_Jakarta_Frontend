@@ -9,7 +9,10 @@ import usePaginationState from "../hooks/usePaginationState";
 import useJobFilters from "../hooks/useJobFilters";
 
 const AdminJobsPage: React.FC = () => {
-  const { skip, take } = usePaginationState({ skip: 0, take: 20 });
+  const { skip, take, setPagination } = usePaginationState({
+    skip: 0,
+    take: 20,
+  });
   const { q, toParams, setSearch } = useJobFilters();
   const qc = useQueryClient();
 
@@ -36,17 +39,37 @@ const AdminJobsPage: React.FC = () => {
         onChange={setSearch}
         onCreate={() => alert("create")}
       />
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : items.length === 0 ? (
+      {items.length === 0 && !isLoading ? (
         <TableEmptyState />
       ) : (
         <DataTable
           items={items}
+          loading={isLoading}
           onEdit={(id) => alert(`edit ${id}`)}
           onDelete={(id) => del.mutate(id)}
         />
       )}
+      <div className="flex items-center justify-between mt-4">
+        <div className="text-sm text-slate-500">
+          Showing {items.length} items
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setPagination({ skip: Math.max(0, skip - take) })}
+            disabled={skip === 0}
+            className="btn btn-sm"
+          >
+            Prev
+          </button>
+          <button
+            onClick={() => setPagination({ skip: skip + take })}
+            disabled={items.length < take}
+            className="btn btn-sm"
+          >
+            Next
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

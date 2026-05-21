@@ -2,13 +2,29 @@ import { useMemo } from "react";
 import { useQueryState } from "./useQueryState";
 import type { EmploymentType, WorkMode } from "../types";
 
+const employmentTypes: EmploymentType[] = [
+  "FULL_TIME",
+  "PART_TIME",
+  "CONTRACT",
+  "INTERNSHIP",
+  "TEMPORARY",
+  "OTHER",
+];
+
+const workModes: WorkMode[] = ["REMOTE", "ONSITE", "HYBRID"];
+
 export const useJobFilters = () => {
   const qs = useQueryState();
 
   const q = qs.get("q") ?? "";
-  const employment =
-    (qs.get("employment") as EmploymentType | undefined) ?? undefined;
-  const workMode = (qs.get("workMode") as WorkMode | undefined) ?? undefined;
+  const employmentValue = qs.get("employment");
+  const workModeValue = qs.get("workMode");
+  const employment = employmentTypes.includes(employmentValue as EmploymentType)
+    ? (employmentValue as EmploymentType)
+    : undefined;
+  const workMode = workModes.includes(workModeValue as WorkMode)
+    ? (workModeValue as WorkMode)
+    : undefined;
 
   const setSearch = (value?: string) => qs.set("q", value ?? null);
   const setEmployment = (value?: EmploymentType) =>

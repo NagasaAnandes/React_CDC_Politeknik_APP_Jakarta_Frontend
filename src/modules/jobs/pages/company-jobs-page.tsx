@@ -10,7 +10,10 @@ import useJobFilters from "../hooks/useJobFilters";
 import { useNavigate } from "react-router-dom";
 
 const CompanyJobsPage: React.FC = () => {
-  const { skip, take } = usePaginationState({ skip: 0, take: 10 });
+  const { skip, take, setPagination } = usePaginationState({
+    skip: 0,
+    take: 10,
+  });
   const { q, toParams, setSearch } = useJobFilters();
   const navigate = useNavigate();
 
@@ -33,17 +36,37 @@ const CompanyJobsPage: React.FC = () => {
         onChange={setSearch}
         onCreate={() => navigate("/company/jobs/create")}
       />
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : items.length === 0 ? (
+      {items.length === 0 && !isLoading ? (
         <TableEmptyState />
       ) : (
         <DataTable
           items={items}
+          loading={isLoading}
           onEdit={(id) => navigate(`/company/jobs/${id}/edit`)}
           onDelete={(id) => console.log("delete", id)}
         />
       )}
+      <div className="flex items-center justify-between mt-4">
+        <div className="text-sm text-slate-500">
+          Showing {items.length} items
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setPagination({ skip: Math.max(0, skip - take) })}
+            disabled={skip === 0}
+            className="btn btn-sm"
+          >
+            Prev
+          </button>
+          <button
+            onClick={() => setPagination({ skip: skip + take })}
+            disabled={items.length < take}
+            className="btn btn-sm"
+          >
+            Next
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

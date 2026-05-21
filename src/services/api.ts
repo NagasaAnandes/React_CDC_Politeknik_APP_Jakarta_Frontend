@@ -57,12 +57,14 @@ export const createAPI = (): AxiosInstance => {
     },
     (error: AxiosError) => {
       if (import.meta.env.DEV) {
+        // Avoid surfacing user-facing network errors as console.error during normal flows
         // eslint-disable-next-line no-console
-        console.error(
+        console.debug(
           "[api] response error",
           error.config?.method,
           error.config?.url,
-          error,
+          error?.response?.status,
+          error.message,
         );
       }
       const status = error.response?.status;

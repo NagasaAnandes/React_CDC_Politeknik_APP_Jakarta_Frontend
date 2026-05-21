@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import AppRouter from "./AppRouter";
 import AppQueryProvider from "./app/providers/QueryProvider";
+import AppErrorBoundary from "./components/AppErrorBoundary";
 import { Toaster } from "sonner";
 import useAuthStore from "./modules/auth/store/auth.store";
 
@@ -14,12 +15,21 @@ const Root: React.FC = () => {
 
   return (
     <StrictMode>
-      <AppQueryProvider>
-        <AppRouter />
-        <Toaster position="top-right" richColors />
-      </AppQueryProvider>
+      <AppErrorBoundary>
+        <AppQueryProvider>
+          <AppRouter />
+          <Toaster position="top-right" richColors />
+        </AppQueryProvider>
+      </AppErrorBoundary>
     </StrictMode>
   );
 };
 
-createRoot(document.getElementById("root")!).render(<Root />);
+const container = document.getElementById("root")!;
+const __ROOT_KEY = "__react_root__";
+
+if (!(window as any)[__ROOT_KEY]) {
+  (window as any)[__ROOT_KEY] = createRoot(container);
+}
+
+(window as any)[__ROOT_KEY].render(<Root />);

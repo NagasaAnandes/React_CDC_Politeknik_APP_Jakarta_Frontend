@@ -4,6 +4,7 @@ import type { User } from "../types/user";
 import { me as meApi } from "../api/auth.api";
 import { clearAccessToken, setAccessToken } from "../lib/token";
 import { onUnauthorized } from "../lib/auth-events";
+import { ZodError } from "zod";
 
 type AuthState = {
   user: User | null;
@@ -92,6 +93,7 @@ export const useAuthStore = create<AuthState>()(
           syncAuthState(set, data.user, token);
         } catch (e: any) {
           const status = e?.status ?? e?.response?.status;
+          const isMalformedAuthResponse = e instanceof ZodError;
           if (import.meta.env.DEV) {
             // eslint-disable-next-line no-console
             console.debug(
@@ -100,7 +102,7 @@ export const useAuthStore = create<AuthState>()(
               e,
             );
           }
-          if (status === 401) {
+          if (status === 401 || status === 403 || isMalformedAuthResponse) {
             clearAccessToken();
             syncAuthState(set, null, null);
           }

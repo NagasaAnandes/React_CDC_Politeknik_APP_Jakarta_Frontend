@@ -44,9 +44,9 @@ const PublicJobsPage: React.FC = () => {
               to={`/jobs/${job.slug ?? job.id}`}
               className="p-4 border rounded hover:shadow"
             >
-              <div className="font-semibold">{job.title}</div>
+              <div className="font-semibold wrap-break-word">{job.title}</div>
               <div className="text-sm text-slate-500">
-                {job.companyName} • {job.location}
+                {job.companyName ?? "—"} • {job.location ?? "—"}
               </div>
             </Link>
           ))}

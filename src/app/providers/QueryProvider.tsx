@@ -10,6 +10,18 @@ const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (err: any) => {
       if (import.meta.env.DEV) {
+        const status = err?.status ?? err?.response?.status;
+        if (status === 401 || status === 403 || status === 404) {
+          // Expected query failures are handled in the UI, so keep them out of the error console.
+          // eslint-disable-next-line no-console
+          console.debug(
+            "[react-query] handled query error",
+            status,
+            err?.message,
+          );
+          return;
+        }
+
         // eslint-disable-next-line no-console
         console.error("[react-query] query error", err);
       }
@@ -34,7 +46,7 @@ export const AppQueryProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => (
   <QueryClientProvider client={queryClient}>
     {children}
-    <ReactQueryDevtools initialIsOpen={false} />
+    {import.meta.env.DEV ? <ReactQueryDevtools initialIsOpen={false} /> : null}
   </QueryClientProvider>
 );
 
